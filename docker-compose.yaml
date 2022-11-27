@@ -13,6 +13,7 @@ services:
       - ./app.conf:/etc/nginx/templates/default.conf.template
       - ./data/letsencrypt:/etc/letsencrypt:ro
       - ./data/certbot:/var/www/certbot
+      - ./data/logs:/var/log/nginx
   certbot:
     container_name: certbot
     image: certbot/certbot:v2.0.0
@@ -22,3 +23,8 @@ services:
     - ./data/certbot/conf:/etc/letsencrypt
     - ./data/certbot/www:/var/www/certbot
     entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'
+
+
+networks:
+  default:
+    name: trufi-server
